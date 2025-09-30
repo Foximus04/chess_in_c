@@ -55,14 +55,13 @@ int chessBoard[8][8] = {
 //     {BROOK, BKNIG,  BBISH,  BQUEN,  BKING,  BBISH,  BKNIG,  BROOK },
 //     {0,     0,      0,      0,      0,      0,      0,      0     },
 //     {0,     0,      0,      0,      0,      0,      0,      0     },
-//     {0,     0,      0,      0,      0,      0,      0,      0     },
+//     {0,     0,      0,      BPAWN,      0,      0,      0,      0     },
 //     {0,     0,      0,      0,      0,      0,      0,      0     },
 //     {0,     0,      0,      0,      0,      0,      0,      0     },
 //     {0,     0,      0,      0,      0,      0,      0,      0     },
 //     {WROOK, WKNIG,  WBISH,  WQUEN,  WKING,  WBISH,  WKNIG,  WROOK }
 // };
 bool gameRunning = true;
-
 
 int printBoard() {  //
     printf("\n     a   b   c   d   e   f   g   h  \n");
@@ -409,35 +408,84 @@ bool kingLogic(int x1, int x2, int y1, int y2) {
         checkDeltaDiagonal(x2, 7,y2, 7)
     };
     
-    int enemyRook, enemyQuen, enemyBish;
+    int enemyRook, enemyQuen, enemyBish, enemyKnig, enemyPawn, enemyKing;
 
     switch (isWhite(chessBoard[y1][x1])) {
     case true:
         enemyRook = BROOK;
         enemyQuen = BQUEN;
         enemyBish = BBISH;
+        enemyKnig = BKNIG;
+        enemyPawn = BPAWN;
+        enemyKing = BKING;
         break;
     case false:
         enemyRook = WROOK;
         enemyQuen = WQUEN;
         enemyBish = WBISH;
+        enemyKnig = WKNIG;
+        enemyPawn = WPAWN;
+        enemyKing = WKING;
         break;
     default:
         break;
     }
     for (int i = 0; i < 4; i++) {
-        printf("Straight: '%c'\t nr '%i'\n",dangersStraight[i], i);
+        // printf("Straight: '%c'\t nr '%i'\n",dangersStraight[i], i);
         if ((dangersStraight[i] == enemyRook) || (dangersStraight[i] == enemyQuen)) {
             printf("Invalid move, %c threatens that square.\n", dangersStraight[i]);
             return false;
         }
-        if (dangersStraight[i] == WKING) printf("i hate myself");
+        // if (dangersStraight[i] == WKING) printf("i hate myself");
         // printf("Diagonal: '%c'\n",dangersDiagonal[i]);
         if ((dangersDiagonal[i] == enemyBish) || (dangersDiagonal[i] == enemyQuen)) {
             printf("Invalid move, %c threatens that square.\n", dangersDiagonal[i]);
             return false;
         }
     }
+    int possibleKnights[8][2] = {
+        { y2 + 2, x2 + 1 }, { y2 + 2, x2 - 1 },
+        { y2 + 1, x2 + 2 }, { y2 + 1, x2 - 2 },
+        { y2 - 2, x2 + 1 }, { y2 - 2, x2 - 1 },
+        { y2 - 1, x2 + 2 }, { y2 - 1, x2 - 2 }
+    };
+    for (int i = 0; i < 8; i++){
+        if (chessBoard[possibleKnights[i][0]][possibleKnights[i][1]] == enemyKnig) {
+            printf("Invalid move, %c threatens that square.\n", enemyKnig);
+            return false;
+        }
+    }
+    int possibleWhitePawns[2][2] = {
+        { y2 - 1, x2 - 1 },
+        { y2 - 1, x2 + 1 }
+    };
+    int possibleBlackPawns[2][2] = {
+        { y2 + 1, x2 - 1 },
+        { y2 + 1, x2 + 1 }
+    };
+    int possibleEnemyPawns[2][2];
+    
+    if (isWhite(chessBoard[y1][x1])) {
+        if (chessBoard[possibleBlackPawns[0][0]][possibleBlackPawns[0][1]] == enemyPawn) {
+            printf("Invalid move, %c is threatening that square.\n", enemyPawn);
+            return false;
+        }
+        if (chessBoard[possibleBlackPawns[1][0]][possibleBlackPawns[1][1]] == enemyPawn) {
+            printf("Invalid move, %c is threatening that square.\n", enemyPawn);
+            return false;
+        }
+    }
+    else {
+        if (chessBoard[possibleWhitePawns[0][0]][possibleWhitePawns[0][1]] == enemyPawn) {
+            printf("Invalid move, %c is threatening that square.\n", enemyPawn);
+            return false;
+        }
+        if (chessBoard[possibleWhitePawns[1][0]][possibleWhitePawns[1][1]] == enemyPawn) {
+            printf("Invalid move, %c is threatening that square.\n", enemyPawn);
+            return false;
+        }
+    }
+
     
     printf("\n");
     return true;
