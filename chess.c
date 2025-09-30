@@ -63,6 +63,7 @@ int chessBoard[8][8] = {
 // };
 bool gameRunning = true;
 
+
 int printBoard() {  //
     printf("\n     a   b   c   d   e   f   g   h  \n");
     printf("   %c", TOPL);                          // Top border line
