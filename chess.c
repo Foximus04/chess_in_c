@@ -463,8 +463,7 @@ bool kingLogic(int x1, int x2, int y1, int y2) {
         { y2 + 1, x2 - 1 },
         { y2 + 1, x2 + 1 }
     };
-    int possibleEnemyPawns[2][2];
-    
+    int possibleEnemyPawns[2][2];    
     if (isWhite(chessBoard[y1][x1])) {
         if (chessBoard[possibleBlackPawns[0][0]][possibleBlackPawns[0][1]] == enemyPawn) {
             printf("Invalid move, %c is threatening that square.\n", enemyPawn);
